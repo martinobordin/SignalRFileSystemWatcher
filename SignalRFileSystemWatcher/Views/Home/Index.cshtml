@@ -1,0 +1,61 @@
+﻿@using System.Configuration
+@{
+    var title = "SignalR FileSystem Watcher";
+    var folder = ConfigurationManager.AppSettings["FolderToWatch"];
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@title</title>
+    <style type="text/css">
+        .Changed {
+            color: purple;
+        }
+
+        .Created {
+            color: green;
+        }
+
+        .Deleted {
+            color: red;
+        }
+
+        .Renamed {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>@title</h1>
+        <span>(Please modify files/folders in <strong>@folder</strong>)</span>
+        <h2>Console:</h2>
+        <ul id="console"></ul>
+    </div>
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var fileSystem = $.connection.fileSystemHub;
+            var createItem = function (fileSystemEventArgs) {
+                return '<li class="' + fileSystemEventArgs.ChangeType + '">' + fileSystemEventArgs.ChangeType + ' - ' + fileSystemEventArgs.FileName + '</li>';
+            };
+            fileSystem.client.notifyEvent = function (fileSystemEventArgs) {
+                $("#console").prepend(createItem(fileSystemEventArgs));
+            };
+
+            fileSystem.client.notifyError = function (errorEventArgs) {
+                alert(errorEventArgs.Exception);
+            };
+
+            // Start the connection.
+            $.connection.hub.start().done(function () { });
+        });
+    </script>
+</body>
+
+</html>
