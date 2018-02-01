@@ -9,40 +9,31 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@title</title>
-    <style type="text/css">
-        .Changed {
-            color: purple;
-        }
-
-        .Created {
-            color: green;
-        }
-
-        .Deleted {
-            color: red;
-        }
-
-        .Renamed {
-            color: orange;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
 </head>
 <body>
-    <div>
-        <h1>@title</h1>
-        <span>(Please modify files/folders in <strong>@folder</strong>)</span>
-        <h2>Console:</h2>
-        <ul id="console"></ul>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">@title</h1>
+        <p class="lead">A C# website using SignalR and FileSystemWatcher to immediately notify clients for FileSystem changes</p>
+        <hr class="my-4">
+        <p>Please modify files/folders in <strong>@folder</strong>)</p>
     </div>
-    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
+    <h2>Console:</h2>
+    <ul id="console" class="list-group">
+    </ul>
+</div>
+
 
     <script type="text/javascript">
         $(function () {
             var fileSystem = $.connection.fileSystemHub;
             var createItem = function (fileSystemEventArgs) {
-                return '<li class="' + fileSystemEventArgs.ChangeType + '">' + fileSystemEventArgs.ChangeType + ' - ' + fileSystemEventArgs.FileName + '</li>';
+                return '<li class="' + getClassNameByEvent(fileSystemEventArgs.ChangeType) + '">' + fileSystemEventArgs.ChangeType + ' - ' + fileSystemEventArgs.FileName + '</li>';
             };
             fileSystem.client.notifyEvent = function (fileSystemEventArgs) {
                 $("#console").prepend(createItem(fileSystemEventArgs));
@@ -54,8 +45,27 @@
 
             // Start the connection.
             $.connection.hub.start().done(function () { });
+
+            function getClassNameByEvent(event) {
+                var className = "list-group-item list-group-item-dark";
+                switch (event) {
+                    case "Changed":
+                        className = "list-group-item list-group-item-warning";
+                        break;
+                    case "Created":
+                        className = "list-group-item list-group-item-success";
+                        break;
+                    case "Deleted":
+                        className = "list-group-item list-group-item-danger";
+                        break;
+                    case "Renamed":
+                        className = "list-group-item list-group-item-primary";
+                        break;
+                }
+
+                return className;
+            }
         });
     </script>
 </body>
-
 </html>

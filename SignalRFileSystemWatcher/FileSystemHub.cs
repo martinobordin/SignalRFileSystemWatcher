@@ -15,23 +15,23 @@ namespace SignalRFileSystemWatcher
 
             fileSystemWatcher.Created += (sender, eventArgs) =>
             {
-                NotifyEvent(eventArgs);
+                this.NotifyEvent(eventArgs);
             };
             fileSystemWatcher.Changed += (sender, eventArgs) =>
             {
-                NotifyEvent(eventArgs);
+                this.NotifyEvent(eventArgs);
             };
             fileSystemWatcher.Deleted += (sender, eventArgs) =>
             {
-                NotifyEvent(eventArgs);
+                this.NotifyEvent(eventArgs);
             };
             fileSystemWatcher.Renamed += (sender, eventArgs) =>
             {
-                NotifyEvent(eventArgs);
+                this.NotifyEvent(eventArgs);
             };
             fileSystemWatcher.Error += (sender, eventArgs) =>
             {
-                NotifyError(eventArgs);
+                this.NotifyError(eventArgs);
             };
             fileSystemWatcher.EnableRaisingEvents = true;  
         }
@@ -39,16 +39,16 @@ namespace SignalRFileSystemWatcher
 
         public void NotifyEvent(FileSystemEventArgs eventArgs)
         {
-            Clients.Caller.NotifyEvent(new
+            this.Clients.Caller.NotifyEvent(new
             {
                 ChangeType = eventArgs.ChangeType.ToString(), 
-                FileName = eventArgs.Name,
+                FileName = $"{DateTime.Now} - {eventArgs.Name}",
             });
         }
 
         private void NotifyError(ErrorEventArgs eventArgs)
         {
-            Clients.Caller.NotifyError(new
+            this.Clients.Caller.NotifyError(new
             {
                 Exception = eventArgs.GetException().ToString()
             });
