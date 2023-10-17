@@ -10,9 +10,3 @@ Clone the repository, change the **FolderToWatch** setting and execute the websi
 
 ### Chrome Preview
 ![Chrome][Chrome] 
-
-### Internet Explorer PReview
-![IE][IE] 
-
-[Chrome]: https://github.com/martinobordin/SignalRFileSystemWatcher/raw/master/screenshots/chrome.PNG "Chrome"
-[IE]: https://github.com/martinobordin/SignalRFileSystemWatcher/blob/master/screenshots/ie.PNG "IE"
