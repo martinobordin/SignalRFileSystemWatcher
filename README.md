@@ -8,5 +8,5 @@ Clone the repository, change the **FolderToWatch** setting and execute the websi
  <add key="FolderToWatch" value="c:\temp"/>
 ```
 
-### Chrome Preview
-![Chrome][Chrome] 
+### Preview
+![Chrome](/screenshots/chrome.PNG)
